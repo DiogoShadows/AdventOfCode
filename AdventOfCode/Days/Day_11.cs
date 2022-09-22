@@ -58,5 +58,55 @@ namespace AdventOfCode2021.Days
 
             return flashed;
         }
+
+        public static int PartTwo(List<List<int>> matrix)
+        {
+            Matrix = matrix;
+            int step = 0;
+
+            while (true)
+            {
+                Flashed = new List<string>();
+                step++;
+
+                for (int row = 0; row < Matrix.Count; row++)
+                {
+                    for (int column = 0; column < Matrix[row].Count; column++)
+                    {
+                        RecursionPartTwo(row, column);
+                    }
+                }
+
+                if (Flashed.Count() == Matrix.Count * Matrix[0].Count)
+                    break;
+            }
+
+            return step;
+        }
+
+        public static void RecursionPartTwo(int row, int column)
+        {
+            if (row < 0 || row >= Matrix.Count() || column < 0 || column >= Matrix[0].Count() || Flashed.Any(x => x == $"{row}|{column}"))
+                return;
+
+            Matrix[row][column]++;
+
+            if (Matrix[row][column] <= 9)
+                return;
+
+            Matrix[row][column] = 0;
+            Flashed.Add($"{row}|{column}");
+
+            RecursionPartTwo(row + 1, column);
+            RecursionPartTwo(row - 1, column);
+            RecursionPartTwo(row, column + 1);
+            RecursionPartTwo(row, column - 1);
+            RecursionPartTwo(row + 1, column + 1);
+            RecursionPartTwo(row - 1, column - 1);
+            RecursionPartTwo(row + 1, column - 1);
+            RecursionPartTwo(row - 1, column + 1);
+
+            return;
+        }
     }
 }
