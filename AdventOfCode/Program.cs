@@ -6,23 +6,38 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            List<List<int>> lista = new List<List<int>>();
+            List<List<string>> list = new List<List<string>>();
 
-            for(int i = 0; i < INPUT2.Length; i++)
+            for(int i = 0; i < INPUTTEST2.Length; i++)
             {
-                var linha = new List<int>();
-                foreach(var caracter in INPUT2[i])
+                var palavras = INPUTTEST2[i].Split(" - ");
+
+                var item = list.FirstOrDefault(x => x.FirstOrDefault().Split(" - ")[0] == palavras[0]);
+
+                if (item != null)
+                    item.Add(INPUTTEST2[i]);
+
+                else
+                    list.Add(new List<string> { INPUTTEST2[i] });
+
+                item = list.FirstOrDefault(x => x.FirstOrDefault().Split(" - ")[0] == palavras[1]);
+
+                if (item != null)
                 {
-                    linha.Add(Int32.Parse(caracter.ToString()));
+                    item.Add(palavras[1] + " - " + palavras[0]);
                 }
 
-                lista.Add(linha);
+                else
+                    list.Add(new List<string> { palavras[1] + " - " + palavras[0] });
             }
 
-            Console.WriteLine(Day_11.PartOne(lista));
+            Console.WriteLine(Day_12.PartOne(list));
         }
-        public static string[] INPUT2 = new string[] { "1443582148", "6553734851", "1451741246", "8835218864", "1662317262", "1731656623", "1128178367", "5842351665", "6677326843", "7381433267" };
-        public static string[] INPUT = new string[] { "5483143223", "2745854711", "5264556173", "6141336146", "6357385478", "4167524645", "2176841721", "6882881134", "4846848554", "5283751526" };
+
+        public static string[] INPUTTEST1 = { "start - A", "start - b", "A - c", "A - b", "b - d", "A - end", "b - end" };
+        public static string[] INPUTTEST2 = { "by - TW","start - TW","fw - end","QZ - end","JH - by","ka - start","ka - by","end - JH","QZ - cv","vg - TI","by - fw","QZ - by","JH - ka","JH - vg","vg - fw","TW - cv","QZ - vg","ka - TW","ka - QZ","JH - fw","vg - hu","cv - start","by - cv","ka - cv" };
+
+
     }
 
 }
