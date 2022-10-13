@@ -88,7 +88,16 @@ namespace AdventOfCode2021.Days
                 }
             }
 
-            Console.WriteLine(PATHS.Sum(x => x.Where(y => y.Equals("#")).Count()));
+            for(int i = 0; i < PATHS.Count; i++)
+            {
+                for(int a = 0; a < PATHS[i].Count; a++)
+                {
+                    Console.Write(PATHS[i][a]);
+                }
+                Console.WriteLine();
+            }
+
+            //Console.WriteLine(PATHS.Sum(x => x.Where(y => y.Equals("#")).Count()));
         }
     }
 }
