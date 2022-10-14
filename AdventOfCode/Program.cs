@@ -6,7 +6,7 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            Day_13.Program();
+            Day_14.Program();
         }
 
     }
