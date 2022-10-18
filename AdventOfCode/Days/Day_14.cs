@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,44 +16,108 @@ namespace AdventOfCode2021.Days
 
         public static void Program()
         {
-            List<string> answer = new List<string>();
+            List<List<string>> numberCombinationsInAString = new List<List<string>>();
+            List<List<string>> buffer = new List<List<string>>();
             List<List<string>> listCombinations = new List<List<string>>();
 
-            foreach(var combination in COMBINATIONS1.Split("|").ToList())
+            foreach (var combination in COMBINATIONS2.Split("|").ToList())
             {
                 List<string> model = combination.Split("->").ToList();
                 listCombinations.Add(model);
             }
 
-            foreach(char letter in INPUT1)
+            List<List<string>> letters = new List<List<string>>();
+
+            for (int i = 0; i < INPUT2.Length; i++)
             {
-                answer.Add(letter.ToString());
+                if (letters.Any(x => x[0] == INPUT2[i].ToString()))
+                {
+                    var number = Int64.Parse(letters.First(x => x[0] == INPUT2[i].ToString())[1]);
+                    letters.First(x => x[0] == INPUT2[i].ToString())[1] = $"{number + 1}";
+                }
+
+                else
+                    letters.Add(new List<string> { INPUT2[i].ToString(), "1" });
+
+                if(i < INPUT2.Length - 1)
+                {
+                    if (numberCombinationsInAString.Any(x => x[0] == $"{INPUT2[i]}{INPUT2[i + 1]}"))
+                    {
+                        var number = Int64.Parse(numberCombinationsInAString.First(x => x[0] == $"{INPUT2[i]}{INPUT2[i + 1]}")[1]);
+                        numberCombinationsInAString.First(x => x[0] == $"{INPUT2[i]}{INPUT2[i + 1]}")[1] = $"{number + 1}";
+                    }
+
+                    else
+                        numberCombinationsInAString.Add(new List<string> { $"{INPUT2[i]}{INPUT2[i + 1]}", "1" });
+                }
             }
 
-            int steps = 40;
+            int steps = 10;
 
             for(int a = 0; a < steps; a++)
             {
-                for (int i = 0; i < answer.Count() - 1; i++)
+                buffer = new List<List<string>>();
+
+                foreach(var combination in numberCombinationsInAString)
                 {
-                    string letter = listCombinations.First(x => x[0] == $"{answer[i]}{answer[i + 1]}")[1];
-                    answer.Insert(i + 1, letter);
-                    i++;
+                    buffer.Add(new List<string> { combination[0], "0" });
+                }
+
+                for(int i = 0; i < numberCombinationsInAString.Count(); i++)
+                {
+                    var value = Int64.Parse(numberCombinationsInAString[i][1]);
+
+                    if(value > 0)
+                    {
+                        string newString1 = $"{numberCombinationsInAString[i][0][0]}{listCombinations.First(x => x[0] == numberCombinationsInAString[i][0])[1]}";
+                        string newString2 = $"{listCombinations.First(x => x[0] == numberCombinationsInAString[i][0])[1]}{numberCombinationsInAString[i][0][1]}";
+
+                        var letter = listCombinations.First(x => x[0] == numberCombinationsInAString[i][0])[1];
+
+                        if (letters.Any(x => x[0] == letter))
+                        {
+                            var number = Int64.Parse(letters.First(x => x[0] == letter)[1]);
+                            letters.First(x => x[0] == letter)[1] = $"{number + value}";
+                        }
+
+                        else
+                            letters.Add(new List<string> { letter, $"{value}" });
+
+                        if (buffer.Any(x => x[0] == newString1))
+                        {
+                            var number = Int64.Parse(buffer.First(x => x[0] == newString1)[1]);
+                            buffer.First(x => x[0] == newString1)[1] = $"{number + value}";
+                        }
+
+                        else
+                            buffer.Add(new List<string> { newString1, value.ToString() });
+
+                        if(buffer.Any(x => x[0] == newString2))
+                        {
+                            var number = Int64.Parse(buffer.First(x => x[0] == newString2)[1]);
+                            buffer.First(x => x[0] == newString2)[1] = $"{number + value}";
+                        }
+
+                        else
+                            buffer.Add(new List<string> { newString2, value.ToString() });
+                    }
+                }
+
+                numberCombinationsInAString = new List<List<string>>();
+
+                foreach (var combination in buffer)
+                {
+                    if(Int64.Parse(combination[1]) > 0)
+                        numberCombinationsInAString.Add(combination);
                 }
             }
 
-            int biggest = 0, smallest = 1000;
+            long biggest = 0, smallest = 9999999999999;
 
-            string alreadyCounted = "";
-
-            foreach(var letter in answer)
+            for(int i = 0; i < letters.Count(); i++)
             {
-                if(!alreadyCounted.Contains(letter))
-                {
-                    int count = answer.Count(x => x == letter);
-                    biggest = Math.Max(biggest, count);
-                    smallest = Math.Min(smallest, count);
-                }
+                biggest = Math.Max(Int64.Parse(letters[i][1]), biggest);
+                smallest = Math.Min(Int64.Parse(letters[i][1]), smallest);
             }
 
             Console.WriteLine(biggest - smallest);
