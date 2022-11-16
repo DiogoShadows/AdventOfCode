@@ -35,10 +35,23 @@ namespace AdventOfCode2021.Days
 
             foreach(var item in INPUT1)
             {
-                binary += HEXABINARY.GetValueOrDefault(item);
+                binary += HEXABINARY[item];
             }
 
-            Console.WriteLine(binary.Equals("110100101111111000101000"));
+            var typeId = binary.Substring(3, 3);
+            var type = HEXABINARY.FirstOrDefault(x => x.Value == $"0{typeId}").Key;
+            var restString = binary.Substring(6);
+            string result = "";
+
+            for(int i = 0; i < restString.Length; i += 5)
+            {
+                if (restString.Length - 1 - i < 5)
+                    break;
+
+                result += restString.Substring(i + 1, 4);
+            }
+
+            Console.WriteLine(result.Equals("011111100101"));
         }
     }
 }
