@@ -40,16 +40,38 @@ namespace AdventOfCode2021.Days
 
             var typeId = binary.Substring(3, 3);
             var type = HEXABINARY.FirstOrDefault(x => x.Value == $"0{typeId}").Key;
-            var restString = binary.Substring(6);
             string result = "";
 
-            for(int i = 0; i < restString.Length; i += 5)
+            //TODO - For now, the first packet has other packets inside
+            if(type == '4')
             {
-                if (restString.Length - 1 - i < 5)
-                    break;
+                var restString = binary.Substring(6);
 
-                result += restString.Substring(i + 1, 4);
+                for(int i = 0; i < restString.Length; i += 5)
+                {
+                    if (restString.Length - 1 - i < 5)
+                        break;
+
+                    result += restString.Substring(i + 1, 4);
+                }
+
             }
+
+            else
+            {
+                var lengthTypeId = binary.Substring(4, 1);
+
+                if(lengthTypeId == "0")
+                {
+
+                }
+
+                else
+                {
+
+                }
+            }
+
 
             Console.WriteLine(result.Equals("011111100101"));
         }
