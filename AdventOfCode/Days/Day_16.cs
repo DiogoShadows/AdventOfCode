@@ -28,6 +28,7 @@ namespace AdventOfCode2021.Days
             {'E',"1110"},
             {'F',"1111"}
         }; 
+        public static int sumVersions = 0;
 
         public static void Program()
         {
@@ -38,42 +39,43 @@ namespace AdventOfCode2021.Days
                 binary += HEXABINARY[item];
             }
 
-            var typeId = binary.Substring(3, 3);
-            var type = HEXABINARY.FirstOrDefault(x => x.Value == $"0{typeId}").Key;
-            string result = "";
+            Recursion(binary);
 
-            //TODO - For now, the first packet has other packets inside
-            if(type == '4')
+            Console.WriteLine(sumVersions);
+        }
+
+        public static void Recursion(string packet)
+        {
+            if (packet.Length <= 0)
+                return;
+
+            var version = packet.Substring(0, 3);
+            var type = HEXABINARY.FirstOrDefault(x => x.Value == $"0{packet.Substring(3, 3)}").Key;
+            sumVersions += Int32.Parse(type.ToString());
+
+            if (type == '4')
             {
-                var restString = binary.Substring(6);
+                var restString = packet.Substring(6);
+                int i = 0;
 
-                for(int i = 0; i < restString.Length; i += 5)
+                for (; i < restString.Length; i += 5)
                 {
-                    if (restString.Length - 1 - i < 5)
+                    if (restString[i] == 0)
                         break;
-
-                    result += restString.Substring(i + 1, 4);
                 }
 
+                if (i + 5 > restString.Length)
+                    return;
+
+                Recursion(restString.Substring(i));
             }
 
             else
             {
-                var lengthTypeId = binary.Substring(4, 1);
+                var lenghtTypeId = HEXABINARY.FirstOrDefault(x => x.Value == $"0{packet.Substring(6, 1)}").Key;
 
-                if(lengthTypeId == "0")
-                {
-
-                }
-
-                else
-                {
-
-                }
+                int size = lenghtTypeId == '1' ? 11 : 15;
             }
-
-
-            Console.WriteLine(result.Equals("011111100101"));
         }
     }
 }
