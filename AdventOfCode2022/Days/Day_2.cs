@@ -32,5 +32,38 @@ namespace AdventOfCode2022.Days
 
             return totalPoints;
         }
+
+        public static int PartTwo()
+        {
+            Dictionary<string, string> matchUps = new Dictionary<string, string>() { { "A", "1|C|B" }, { "B", "2|A|C" }, { "C", "3|B|A" } };
+
+            var matches = INPUT.Split("|");
+            int totalPoints = 0;
+
+            foreach (var match in matches)
+            {
+                var hands = match.Split("-");
+                string choice = "";
+
+                if (hands[1] == "X")
+                    choice = matchUps[hands[0]].Split("|")[1];
+
+                else if (hands[1] == "Y")
+                {
+                    choice = hands[0];
+                    totalPoints += 3;
+                }
+
+                else
+                {
+                    choice = matchUps[hands[0]].Split("|")[2];
+                    totalPoints += 6;
+                }
+
+                totalPoints += Int32.Parse(matchUps[choice].Split("|")[0]);
+            }
+
+            return totalPoints;
+        }
     }
 }
