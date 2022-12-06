@@ -12,8 +12,7 @@ namespace AdventOfCode2022.Days
 
         public static int PartOne()
         {
-            Dictionary<string, int> points = new Dictionary<string, int>() { { "X", 1 }, { "Y", 2 }, { "Z", 3 } };
-            Dictionary<string, string> matchWin = new Dictionary<string, string>() { { "X", "C" }, { "Y", "A" }, { "Z", "B" } };
+            Dictionary<string, string> points = new Dictionary<string, string>() { { "X", "1|C|A" }, { "Y", "2|A|B" }, { "Z", "3|B|C" } };
 
             var matches = INPUT.Split("|");
             int totalPoints = 0;
@@ -21,12 +20,13 @@ namespace AdventOfCode2022.Days
             foreach ( var match in matches )
             {
                 var hands = match.Split("-");
-                totalPoints += points[hands[1]];
+                var items = points[hands[1]].Split("|");
+                totalPoints += Int32.Parse(items[0]);
 
-                if (matchWin[hands[1]] == hands[0])
+                if (items[1] == hands[0])
                     totalPoints += 6;
 
-                else if (hands[1] == hands[0])
+                else if (hands[0] == items[2])
                     totalPoints += 3;
             }
 
