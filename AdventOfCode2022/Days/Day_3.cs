@@ -22,7 +22,37 @@ namespace AdventOfCode2022.Days
                 var valueAsciiItem = (int)secondHalf.First(x => firstHalf.Contains(x));
 
                 //In case of uppercase, sum the difference to the lowercase char, minus the count defined, plus the diference to uppercase points
-                total += valueAsciiItem >= 97 ? valueAsciiItem - 96 : valueAsciiItem + 32 - 96 + 26;
+                total += CalculatePriority(valueAsciiItem);
+            }
+
+            return total;
+        }
+
+        public static int CalculatePriority(int valueAsciiItem) => valueAsciiItem >= 97 ? valueAsciiItem - 96 : valueAsciiItem + 32 - 96 + 26;
+
+        public static int PartTwo()
+        {
+            var rucksacks = INPUT2.Split("|");
+            int total = 0;
+
+            for(int i = 0; i + 2 < rucksacks.Count(); i += 3)
+            {
+                var sack1 = rucksacks[i];
+
+                foreach(var item in sack1)
+                {
+                    if(rucksacks[i + 1].Contains(item) && rucksacks[i + 2].Contains(item))
+                    {
+                        total += CalculatePriority((int)item);
+                        break;
+                    }
+
+                    else
+                    {
+                        rucksacks[i + 1] = rucksacks[i + 1].Replace(item.ToString(), "");
+                        rucksacks[i + 2] = rucksacks[i + 2].Replace(item.ToString(), "");
+                    }
+                }
             }
 
             return total;
