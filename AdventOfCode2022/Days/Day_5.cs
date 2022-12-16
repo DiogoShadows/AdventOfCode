@@ -14,7 +14,7 @@ namespace AdventOfCode2022.Days
         public static string INPUTCRATES2 = "    [D]    |[N] [C]    |[Z] [M] [P]| 1   2   3 ";
         public static string INPUTMOVES2 = "1-2-1|3-1-3|2-2-1|1-1-2";
 
-        public static string PartOne()
+        public static string Answer()
         {
             var rows = INPUTCRATES.Split("|");
             List<string> piles = new List<string>();
@@ -49,11 +49,15 @@ namespace AdventOfCode2022.Days
 
                 var crates = piles[from].Substring(piles[from].Count() - quant);
                 piles[from] = piles[from].Substring(0, piles[from].Count() - quant);
-                
-                for(int i = crates.Count() - 1; i >= 0; i--)
-                {
-                    piles[to] += crates[i];
-                }
+
+                //For Part One
+                //for(int i = crates.Count() - 1; i >= 0; i--)
+                //{
+                //    piles[to] += crates[i];
+                //}
+
+                //For Part Two
+                piles[to] += crates;
             }
 
             string final = "";
