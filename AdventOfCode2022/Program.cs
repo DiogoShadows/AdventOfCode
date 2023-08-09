@@ -6,7 +6,7 @@ namespace AdventOfCode2022
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Day_8.PartOne());
+            Console.WriteLine(Day_8.PartTwo());
         }
     }
 }

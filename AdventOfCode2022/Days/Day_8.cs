@@ -32,6 +32,41 @@ namespace AdventOfCode2022.Days
             return total;
         }
 
+        public static int PartTwo()
+        {
+            arrayRows = INPUT_2.Split("|").ToList();
+            int maxScenicScore = 0;
+
+            for (int row = 0; row < arrayRows.Count(); row++)
+            {
+                for (int column = 0; column < arrayRows[row].Length; column++)
+                {
+                    int right = ScenicScore(row, column + 1, "right", arrayRows[row][column], 0);
+                    int left = ScenicScore(row, column - 1, "left", arrayRows[row][column], 0);
+                    int up = ScenicScore(row - 1, column, "up", arrayRows[row][column], 0);
+                    int down = ScenicScore(row + 1, column, "down", arrayRows[row][column], 0);
+                    int treesSum = right * up * down * left; 
+
+                    maxScenicScore = Math.Max(maxScenicScore, treesSum);
+                }
+            }
+            return maxScenicScore;
+        }
+
+        public static int ScenicScore(int row, int column, string direction, int value, int total)
+        {
+            if (row <= -1 || row >= arrayRows.Count() || column >= arrayRows[row].Length || column <= -1)
+                return total;
+
+            total += 1;
+
+            if (value <= arrayRows[row][column])
+                return total;
+
+            return ScenicScore(direction == "up" ? row - 1 : direction == "down" ? row + 1 : row,
+                direction == "right" ? column + 1 : direction == "left" ? column - 1 : column, direction, value, total);
+        }
+
         public static bool IsBiggestInADirection(int row, int column, int value, string direction)
         {
             if (row <= -1 || row >= arrayRows.Count() || column >= arrayRows[row].Length || column <= -1)
